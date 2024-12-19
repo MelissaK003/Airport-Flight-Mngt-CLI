@@ -8,9 +8,9 @@ class Airline(Base):
     __tablename__ = 'airlines'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
+    name = Column(String(100), nullable=False,unique=True)
     email = Column(String(100), unique=True, nullable=False )
-    phone_number = Column(String(30), nullable=False)
+    phone_number = Column(String(30), nullable=False, unique=True)
 
     #One Airline can have many Flights
     flights = relationship("Flight", back_populates="airline")
@@ -22,7 +22,7 @@ class Destination(Base):
     id = Column(Integer, primary_key=True)
     country = Column(String(100), nullable=True)
     city = Column(String(100), nullable=False)
-    airport_code = Column(CHAR(10), nullable=True)
+    airport_code = Column(CHAR(10), nullable=True, unique=True)
 
     # One Destination can receive many Flights
     flights = relationship("Flight", back_populates="destination")
@@ -36,9 +36,9 @@ class Flight(Base):
     airline_id = Column(Integer, ForeignKey('airlines.id'))
     base_location = Column(CHAR(100), nullable=False)
     destination_id = Column(Integer, ForeignKey('destinations.id'))
-    flight_date = Column(Date, nullable=False)
-    departure_time = Column(Time, nullable=False)
-    arrival_time = Column(Time, nullable=False)
+    flight_date = Column(String(10), nullable=False)
+    departure_time = Column(String(5), nullable=False)
+    arrival_time = Column(String(5), nullable=False)
 
     # Relationships
     airline = relationship("Airline", back_populates="flights")

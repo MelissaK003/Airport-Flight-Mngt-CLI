@@ -9,13 +9,13 @@ def add_airline():
     phone_number = input("Enter Phone Number: ").strip()
 
     if not name:
-        print("Airline name cannot be empty.")
+        print("Airline name required.")
         return
     if not email:
-        print("Airline email cannot be empty.")
+        print("Airline email required.")
         return
     if not phone_number:
-        print("Phone number cannot be empty.")
+        print("Phone number required.")
         return
 
     airline = Airline(name=name, email=email, phone_number=phone_number)
@@ -32,9 +32,9 @@ def update_airline():
     airline_id = int(input("Enter Airline ID to update: "))
     airline = session.query(Airline).filter_by(id=airline_id).first()
     if airline:
-        airline.name = input(f"Enter new name (current: {airline.name}): ")
-        airline.email = input(f"Enter new email (current: {airline.email}): ")
-        airline.phone_number = input(f"Enter new Phone Number (current: {airline.phone_number}): ")
+        airline.name = input(f"Enter new name (current: {airline.name}): ").strip() or airline.name
+        airline.email = input(f"Enter new email (current: {airline.email}): ").strip() or airline.email
+        airline.phone_number = input(f"Enter new Phone Number (current: {airline.phone_number}): ").strip() or airline.phone_number
         session.commit()
         print("Airline updated successfully.")
     else:
@@ -57,7 +57,7 @@ def add_destination():
     airport_code = input("Enter Airport Code: ").strip()
     
     if not city:
-        print("City name cannot be empty.")
+        print("City name required.")
         return
     
     destination = Destination(city=city, country=country, airport_code=airport_code)  
@@ -76,9 +76,10 @@ def update_destination():
     destination = session.query(Destination).filter_by(id=destination_id).first()
     
     if destination:
-        destination.city = input(f"Enter new City(current: {destination.city}): ")
-        destination.country = input(f"Enter new Country(current: {destination.country}): ")
-        destination.airport_code = input(f"Enter new Airport Code (current: {destination.airport_code}): ")
+        destination.city = input(f"Enter new City (current: {destination.city}): ").strip() or destination.city
+        destination.country = input(f"Enter new Country (current: {destination.country}): ").strip() or destination.country
+        destination.airport_code = input(f"Enter new Airport Code (current: {destination.airport_code}): ").strip() or destination.airport_code
+
         session.commit()
         print("Destination updated successfully.")
     else:
@@ -102,8 +103,8 @@ def add_flight():
     base_location = input("Enter Base Location: ").strip()
     destination_id = input("Enter Destination ID: ").strip()
     flight_date = input("Enter Flight Date (YYYY-MM-DD): ").strip()
-    departure_time = input("Enter Departure Time (HH:MM): ").strip()
-    arrival_time = input("Enter Arrival Time (HH:MM): ").strip()
+    departure_time = input("Enter Departure Time (HH:MM)(AM/PM): ").strip()
+    arrival_time = input("Enter Arrival Time (HH:MM)(AM/PM): ").strip()
 
     if not flight_number:
         print("Flight number cannot be empty.")
@@ -147,20 +148,36 @@ def view_flight():
               f"{flight.destination_id} - {flight.flight_date} - {flight.departure_time} - {flight.arrival_time}")
 
 def update_flight():
-    flight_id = int(input("Enter Flight ID to update: "))
-    flight = session.query(Flight).filter_by(id=flight_id).first()
-    if flight:
-        flight.flight_number = input(f"Enter new flight number (current: {flight.flight_number}): ")
-        flight.airline_id = int(input(f"Enter new airline ID (current: {flight.airline_id}): "))
-        flight.base_location = input(f"Enter new base location (current: {flight.base_location}): ")
-        flight.destination_id = int(input(f"Enter new destination ID (current: {flight.destination_id}): "))
-        flight.flight_date = input(f"Enter new flight date (current: {flight.flight_date}): ")
-        flight.departure_time = input(f"Enter new departure time (current: {flight.departure_time}): ")
-        flight.arrival_time = input(f"Enter new arrival time (current: {flight.arrival_time}): ")
+    try:
+        flight_id = int(input("Enter Flight ID to update: ").strip())
+        flight = session.query(Flight).filter_by(id=flight_id).first()
+        if not flight:
+            print(f"No flight found with ID: {flight_id}")
+            return
+
+        updates = {
+            'flight_number': input(f"Enter new flight number (current: {flight.flight_number}): ").strip() or flight.flight_number,
+            'airline_id': int(input(f"Enter new airline ID (current: {flight.airline_id}): ").strip() or flight.airline_id),
+            'base_location': input(f"Enter new base location (current: {flight.base_location}): ").strip() or flight.base_location,
+            'destination_id': int(input(f"Enter new destination ID (current: {flight.destination_id}): ").strip() or flight.destination_id),
+            'flight_date': input(f"Enter new flight date (current: {flight.flight_date}): ").strip() or flight.flight_date,
+            'departure_time': input(f"Enter new departure time (current: {flight.departure_time}): ").strip() or flight.departure_time,
+            'arrival_time': input(f"Enter new arrival time (current: {flight.arrival_time}): ").strip() or flight.arrival_time
+        }
+
+        if session.query(Flight).filter_by(flight_number=updates['flight_number'], flight_date=updates['flight_date']).filter(Flight.id != flight.id).first():
+            print("Error: A flight with the same flight number and flight date already exists.")
+            return
+
+        for key, value in updates.items():
+            setattr(flight, key, value)
+
         session.commit()
         print("Flight updated successfully.")
-    else:
-        print("Flight not found.")
+
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+    
 
 def delete_flight():
     flight_id = int(input("Enter Flight ID to delete: "))
