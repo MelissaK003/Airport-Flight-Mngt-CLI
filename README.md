@@ -30,12 +30,12 @@ A Command-Line Interface (CLI) project for managing relationships between airpor
 The application works perfectly well, no known bugs.
 
 ## Technologies Used
-Python, GIT ,Moka, Canva
+Python, GIT ,Mako, Canva, sqlite, Alembic
 
 ## Support and contact details
 email :Melissakiptoo@gmail.com
 
 ### License
-LIcenced under the MT-licence of 
+LIcenced under the MT-licence of https://github.com/MelissaK003/Airport-Management-App---CLI/blob/master/LICENSE
 
 Copyright (c) 2024 **Melissa Kiptoo**
