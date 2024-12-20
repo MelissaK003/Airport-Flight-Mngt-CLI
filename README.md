@@ -18,7 +18,7 @@ A Command-Line Interface (CLI) project for managing relationships between airpor
   run python main.py
 
 ## Github link 
-* You can clone the github repo from https://github.com/MelissaK003/Airport-Management-App---CLI
+* You can clone the github repo from https://github.com/MelissaK003/Airport-Flight-Mngt-CLI
 
 ## Presentation link
 * You can view the my presenation on https://www.canva.com/design/DAGZwF5nH4M/0x4nw2wt96Mixzgj42UOZQ/edit?utm_content=DAGZwF5nH4M&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
@@ -36,6 +36,6 @@ Python, GIT ,Mako, Canva, sqlite, Alembic
 email :Melissakiptoo@gmail.com
 
 ### License
-LIcenced under the MT-licence of https://github.com/MelissaK003/Airport-Management-App---CLI/blob/master/LICENSE
+LIcenced under the MT-licence of https://github.com/MelissaK003/Airport-Flight-Mngt-CLI/blob/master/LICENSE
 
 Copyright (c) 2024 **Melissa Kiptoo**
